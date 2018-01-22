@@ -1,0 +1,34 @@
+@(sequence: List[Int], form: Form[ElsForm.Data], postUrl: Call)(implicit request: MessagesRequestHeader)
+
+  @main("Fibonacci Sequence") {
+
+    <h1>Fibonacci Sequence</h1>
+
+    @request.flash.data.map{case (value) =>
+        <div>@value</div>
+    }
+
+    <table>
+      <tbody>
+      @for(w <- sequence) {
+        <tr><td>@w</td></tr>
+      }
+      </tbody>
+    </table>
+
+    <hr/>
+
+    @if(form.hasGlobalErrors) {
+      @form.globalErrors.map { error: FormError =>
+        <div>
+          @error.key: @error.message
+        </div>
+      }
+    }
+
+    @helper.form(postUrl) {
+      @helper.CSRF.formField
+      @helper.inputText(form("Enter the number of elements:"))
+      <button>Create</button>
+    }
+  }
